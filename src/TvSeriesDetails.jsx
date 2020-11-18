@@ -15,15 +15,16 @@ const customStyles = {
   }
 };
 
-class Details extends React.Component {
+class TvSeriesDetails extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-        moviesDetails: {},
-        moviesVideos: {},
+        tvshowsDetails: {},
+        tvshowsVideos: {},
         videoUrl:"",
-        LanguagesHere:"",
-        productionCompany:"",
+        languages:[],
+        runtime:[],
+        tvshowseasons:"",
         modalIsOpen: false
       }
     }
@@ -33,25 +34,25 @@ class Details extends React.Component {
     }
      
     componentDidMount(){
-      this.moviedetailsAPI();
-      this.movieVideoAPI();
+      this.tvshowsdetailsAPI();
+      this.tvshowsVideoAPI();
     }
 
-    moviedetailsAPI = () =>{
+    tvshowsdetailsAPI = () =>{
       console.log("url data===>", this.props.match.params.id);
-      axios.get("https://api.themoviedb.org/3/movie/"+this.props.match.params.id+"?api_key=6d509219e4a4930feb8a3e9ae47b3a7a")
+      axios.get("https://api.themoviedb.org/3/tv/"+this.props.match.params.id+"?api_key=6d509219e4a4930feb8a3e9ae47b3a7a")
       .then((res) => {
         console.log("response===>", res);
-        this.setState({ moviesDetails: res.data,LanguagesHere: res.data.spoken_languages[0].name,productionCompany: res.data.production_companies[0].name});
+        this.setState({ tvshowsDetails: res.data,languages: res.data.languages,tvshowseasons: res.data.seasons.length,runtime: res.data.episode_run_time});
       })
     }
 
-    movieVideoAPI = () =>{
+    tvshowsVideoAPI = () =>{
       console.log("url data===>", this.props.match.params.id);
-      axios.get("https://api.themoviedb.org/3/movie/"+this.props.match.params.id+"/videos?api_key=6d509219e4a4930feb8a3e9ae47b3a7a")
+      axios.get("https://api.themoviedb.org/3/tv/"+this.props.match.params.id+"/videos?api_key=6d509219e4a4930feb8a3e9ae47b3a7a")
       .then((res) => {
         console.log("response===>", res);
-        this.setState({ moviesVideos: res.data,videoUrl: res.data.results[0].key});
+        this.setState({ tvshowsVideos: res.data,videoUrl: res.data.results[0].key});
       })
     }
 
@@ -68,7 +69,7 @@ class Details extends React.Component {
             return <Redirect to={"/"} />
         }
         // let { } = this.props;
-        let {moviesDetails,moviesVideos, modalIsOpen} = this.state;
+        let {tvshowsDetails,tvshowsVideos, modalIsOpen} = this.state;
         return (
           <div className="mainwrapper">
             {/* header start here */}
@@ -78,7 +79,7 @@ class Details extends React.Component {
             <div className="mainDetailscomp">
                 <div className="backgrImgwrap">
                     <div className="backgrImg" onClick={() => this.openModal()}>
-                        <img src={"http://image.tmdb.org/t/p/original/"+ moviesDetails.backdrop_path} className="img-responsive backGrImage"/>
+                        <img src={"http://image.tmdb.org/t/p/original"+ tvshowsDetails.backdrop_path} className="img-responsive backGrImage"/>
                         <div className="plybuton">
                             <i class="fa fa-play" aria-hidden="true"></i>
                         </div>
@@ -88,17 +89,36 @@ class Details extends React.Component {
                         <div className="container">
                             <div className="detailsMoviesetmg">
                                 <div className="mainsmllImg">
-                                    <img src={" http://image.tmdb.org/t/p/w185/"+ moviesDetails.poster_path} className="img-responsive"/>
+                                    <img src={"https://image.tmdb.org/t/p/w185/"+ tvshowsDetails.poster_path} className="img-responsive"/>
                                 </div>
                                 <div className="detailshere">
-                                    <h2>{moviesDetails.title}</h2>
+                                    <h2>{tvshowsDetails.name}</h2>
                                     <button className="btn backbtn" onClick={() => this.HomereDirect()}>Back</button>
-                                    <p>{moviesDetails.overview}</p>
+                                    <p>{tvshowsDetails.overview}</p>
                                     <ul className="listdetails">
-                                        <li><span>Release Date :</span>{moviesDetails.release_date}</li>
-                                        <li><span>Runtime :</span>{moviesDetails.runtime}&nbsp;Min</li>
-                                        <li><span>Languages :</span>{this.state.LanguagesHere}</li>
-                                        <li><span>Production Companies :</span>{this.state.productionCompany}</li>
+                                        <li><span>Release Date :</span>{tvshowsDetails.first_air_date}</li>
+                                        <li>
+                                            <span>Runtime :</span>
+                                            <ul className="langlist">
+                                            {this.state.runtime.map((time) => {
+                                                return(
+                                                    <li>{time} Min</li>
+                                                )
+                                            })}
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <span>Languages :</span>
+                                            <ul className="langlist">
+                                            {this.state.languages.map((lang) => {
+                                                return(
+                                                    <li>{lang}</li>
+                                                )
+                                            })}
+                                            </ul>
+                                        </li>
+                                        <li><span>Total Seasons :</span>{this.state.tvshowseasons}</li>
+                                        <li><span>Total Episodes :</span>{tvshowsDetails.number_of_episodes}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -122,4 +142,4 @@ class Details extends React.Component {
     }
    
 }
-export default Details;
+export default TvSeriesDetails;

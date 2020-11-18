@@ -7,17 +7,17 @@ class TvSeries extends React.Component {
         super(props);
         this.state = {
             detailsview : false,
-            movieId : "", 
+            tvshowId : "", 
 		}
     }
 
     ViewDetails = (id) =>{
-      this.setState({movieId : id, detailsview: true})
+      this.setState({tvshowId : id, detailsview: true})
     }
     
     render() {
         if(this.state.detailsview == true){
-            return <Redirect to={"/Details/" + this.state.movieId} />
+            return <Redirect to={"/TvSeriesDetails/" + this.state.tvshowId} />
         }
         let {tvshows} = this.props;
         var settings = {

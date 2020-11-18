@@ -294,6 +294,21 @@ position: absolute;
 left: 0;
 top: 1px;
 }
+.langlist li{
+float: left;
+width: auto;
+padding: 0px;
+}
+.langlist li::before{
+display: none;
+}
+.langlist li::after{
+content: "/";
+margin: 0px 6px;
+}
+.langlist li:last-child::after{
+display: none;
+}
 .listdetails li span{
 float: left;
 width: auto;
