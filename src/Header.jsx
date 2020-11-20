@@ -5,22 +5,24 @@ class Header extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-		  homePage : false,
 		}
     }
-    HomereDirect = () => {
-        this.setState({homePage: true})
+    componentDidMount(){
+        window.addEventListener('scroll', () => {
+           let activeClass = 'backColorNav';
+           if(window.scrollY < 50){
+               activeClass = 'normal';
+           }
+           this.setState({ activeClass });
+        });
     }
     render() {
-        if(this.state.homePage == true){
-            return <Redirect to={"/"} />
-        }
         return (
-            <div className="headerSet">
+            <div className={`headerSet ${this.state.activeClass}`}>
                 <nav className="navbar">
                     <div className="container-fluid">
                         <div className="navbar-header">
-                            <a className="navbar-brand headerLogo" href="javascript:void(0);" onClick={() => this.HomereDirect()}>
+                            <a className="navbar-brand headerLogo" href="/" >
                                 <img src={process.env.PUBLIC_URL+"/img/logo.png"} className="img-responsive" alt="Netflix" />
                             </a>
                         </div>

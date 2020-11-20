@@ -75,6 +75,10 @@ transition: transform .45s;
 transform: scale(1.09);
 opacity: 1;
 }
+.backColorNav{
+background-image: -moz- oldlinear-gradient(top, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1));
+background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1));
+}
 /* header css here */
 .bannerSection{
 float: left;
